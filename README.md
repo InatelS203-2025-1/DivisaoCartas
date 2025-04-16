@@ -1,5 +1,12 @@
 # Documentação do Sistema de Distribuição de Cartas com PokéAPI
 
+## Stack usada
+
+Linguagem: Typescript
+Banco de dados: SQLite
+Mensageria: Kafka
+
+
 ## Visão Geral
 O sistema de distribuição de cartas utiliza a [PokéAPI](https://pokeapi.co/) para selecionar cinco Pokémons aleatórios e atribuí-los a cada jogador cadastrado na plataforma. O processo ocorre automaticamente no momento do cadastro do jogador, garantindo que ele não receba Pokémons repetidos. No entanto, o mesmo Pokémon pode ser distribuído para diferentes jogadores. 
 
