@@ -1,3 +1,3 @@
 export default class Card {
-    private id: stringe,
+  constructor(public readonly id: string) {}
 }

@@ -1,15 +1,16 @@
 import { Router } from "express";
+import UserController from "../controllers/UserController";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-    res.send("Hello, TypeScript + Express!");
-});
+// router.get("/user/cards", UserController.getCards);
+router.get("/user/:id", UserController.getUserInfo);
+
 router.post('/users', (req, res) => {
-    console.log(req.body);
     const response = { data: "oi" };
     res.send(response);
 })
+
 
 //routes.get('/user', UserController)
 
