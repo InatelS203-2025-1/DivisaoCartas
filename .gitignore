@@ -1,0 +1,4 @@
+.DS_Store
+
+cardDistribution/node_modules
+cardDistribution/dist

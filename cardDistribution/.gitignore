@@ -1,0 +1,15 @@
+# Ignorar a pasta node_modules
+node_modules/
+
+# Ignorar a pasta dist
+dist/
+
+# Ignorar a pasta build em qualquer diretório
+build/*
+
+# Ignorar pastas temp em qualquer lugar
+**/temp/
+
+# Ignorar arquivos temporários e de log
+*.log
+*.tmp

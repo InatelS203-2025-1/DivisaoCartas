@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const pokeApi = axios.create({
-    baseURL: process.env.POKEAPI,
+    baseURL: 'https://pokeapi.co/api/v2',
     timeout: 10000
 });
 
