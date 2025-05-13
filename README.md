@@ -4,7 +4,7 @@
 
 Linguagem: Typescript
 Banco de dados: SQLite
-Mensageria: Kafka
+Mensageria: RabbitMQ
 
 
 ## Visão Geral
@@ -26,8 +26,16 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 
 ## Tecnologias Utilizadas
 - **Back-end:** TypeScript
-- **Banco de Dados:** 
+- **Banco de Dados:** SQLITE
 - **API Externa:** PokéAPI
+
+---
+
+## Padrão Arquitetural
+- **SOA** Service Oriented Architecture
+    O projeto se foca em serviços e não se beneficia em fornecer views para seus clientes.
+- **MOM** Message Oriented Middleware
+    O projeto também usa comunicação assíncrona para distribuir cartas a novos jogadores, toda vez que um novo jogador é registrado no broker do RabbitMQ, o sistema reage distribuindo as cartas ao jogador e salvando no banco de dados.
 
 ---
 
@@ -52,7 +60,7 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 
 
 #### **1. Consulta de Pokémons de um jogador**
-**`GET /jogadores/{id}/pokemons`**
+**`GET /users/{id}/pokemons`**
 
 
 **Resposta:**

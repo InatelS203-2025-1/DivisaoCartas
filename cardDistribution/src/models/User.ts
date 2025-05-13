@@ -2,7 +2,6 @@ import { db } from '../config/database'
 import { UserModel } from '../interfaces/UserModel';
 import Card from './Card';
 
-
 export default class User {
   static createUser(user: UserModel) {
     const query = 'INSERT INTO users (id, name) VALUES (?, ?)';
@@ -21,14 +20,12 @@ export default class User {
     return db.get<UserModel>('SELECT * FROM users WHERE id = ?', [id]);
   }
 
-  //lilyan
-
   static getUserCards(userId: string): { id: number; name: string }[] {
     const query = `
-      SELECT cards.id, pokemons.name
-      FROM cards
-      JOIN pokemons ON cards.id = pokemons.id
-      WHERE cards.user_id = ?
+    SELECT cards.id, cards.user_id, users.name
+    FROM cards
+    JOIN users ON cards.user_id = users.id
+    WHERE cards.user_id = ?;
     `;
 
     const rows = db.all(query, [userId]) as { id: number; name: string }[];
@@ -44,7 +41,6 @@ export default class User {
     return { ...user, card: cards };
   }
 
-  //Leticia
   static updateUserCards(cardId: number, newUserId: string): void {
     db.run('UPDATE cards SET user_id = ? WHERE id = ?', [newUserId, cardId]);
 

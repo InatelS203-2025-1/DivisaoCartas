@@ -2,3 +2,4 @@
 
 cardDistribution/node_modules
 cardDistribution/dist
+cardDistribution/.env

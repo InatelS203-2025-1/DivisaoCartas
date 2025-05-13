@@ -28,7 +28,7 @@ export class SQLiteDatabase {
 
     this.db.prepare(`
       CREATE TABLE IF NOT EXISTS cards (
-        id INTEGER PRIMARY KEY UNIQUE,
+        id INTEGER PRIMARY KEY,
         user_id TEXT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       )

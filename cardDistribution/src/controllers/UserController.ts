@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import { v4 as uuidv4 } from 'uuid'
-import PokeApiService from '../services/pokeApi'
+import PokeApiService from '../services/pokeApi/pokeApi'
 import Card from "../models/Card";
 import { requestHelper } from "../utils/requestHelpers";
 
@@ -20,7 +20,8 @@ class UserController {
       requestHelper(response, 201, { username, cards })
     } catch (error) {
       console.error(error);
-      response.status(500).json({ message: 'Server error' });
+      response.status(500).json();
+      requestHelper(response, 500, { message: 'Server error' });
     }
   }
 
@@ -38,7 +39,7 @@ class UserController {
       return;
     }
 
-    response.status(200).json({ userId, cards });
+    requestHelper(response, 200, { userId, cards });
   } catch (error) {
     console.error(error);
     response.status(500).json({ message: 'Erro ao buscar cartas do usuário.' });
