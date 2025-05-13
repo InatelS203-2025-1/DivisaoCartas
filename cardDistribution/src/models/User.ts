@@ -3,6 +3,7 @@ import { UserModel } from '../interfaces/UserModel';
 
 // id: UserModel['id'], name: UserModel['name'], cards: Card[]
 
+
 export default class User {
   static createUser(user: UserModel) {
     const query = 'INSERT INTO users (id, name) VALUES (?, ?)';
