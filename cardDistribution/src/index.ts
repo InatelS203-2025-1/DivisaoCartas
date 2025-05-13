@@ -14,6 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(router);
 db.setup();
 
+app.get('/', (req, res) => {
+  res.send('API de distribuição de cartas está rodandoooooooooo!');
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

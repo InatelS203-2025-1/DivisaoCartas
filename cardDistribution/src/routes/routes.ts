@@ -11,4 +11,7 @@ router.post('/users', UserController.createUser);
 //Leticia
 router.post('/users/trade', UserController.tradeCard);
 
+//lilyan
+router.get('/users/:id/cards', UserController.getUserCards);
+
 export default router;

@@ -2,7 +2,6 @@ import { db } from '../config/database'
 import { UserModel } from '../interfaces/UserModel';
 import Card from './Card';
 
-// id: UserModel['id'], name: UserModel['name'], cards: Card[]
 
 export default class User {
   static createUser(user: UserModel) {
@@ -22,6 +21,21 @@ export default class User {
     return db.get<UserModel>('SELECT * FROM users WHERE id = ?', [id]);
   }
 
+  //lilyan
+
+  static getUserCards(userId: string): { id: number; name: string }[] {
+    const query = `
+      SELECT cards.id, pokemons.name
+      FROM cards
+      JOIN pokemons ON cards.id = pokemons.id
+      WHERE cards.user_id = ?
+    `;
+
+    const rows = db.all(query, [userId]) as { id: number; name: string }[];
+
+    return rows;
+  }
+  
   static getUserById(id: string): UserModel | undefined {
     const user = this.findById(id);
     if (!user) return undefined;
@@ -33,5 +47,6 @@ export default class User {
   //Leticia
   static updateUserCards(cardId: number, newUserId: string): void {
     db.run('UPDATE cards SET user_id = ? WHERE id = ?', [newUserId, cardId]);
+
   }
 }

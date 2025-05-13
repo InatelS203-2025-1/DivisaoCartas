@@ -25,6 +25,27 @@ class UserController {
   }
 
 
+
+
+  async getUserCards(request: Request, response: Response): Promise<void> {
+  const userId = request.params.id;
+
+  try {
+    const cards = await User.getUserCards(userId);
+
+    if (!cards) {
+      response.status(404).json({ message: 'Usuário não encontrado ou sem cartas.' });
+      return;
+    }
+
+    response.status(200).json({ userId, cards });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: 'Erro ao buscar cartas do usuário.' });
+  }
+}
+
+
   //Leticia
   async tradeCard(request: Request, response: Response): Promise<void> {
     const { user1Id, user2Id, card1Id, card2Id } = request.body;
