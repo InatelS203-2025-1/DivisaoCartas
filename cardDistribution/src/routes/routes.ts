@@ -3,6 +3,15 @@ import UserController from "../controllers/UserController";
 
 const router = Router();
 
+router.get('/', (req, res) => {
+    res.status(200).send({ msg: 'ok' });
+})
+
 router.post('/users', UserController.createUser)
+
+//sabrina
+router.put('/jogadores/:id/pokemons', UserController.distributePokemons);
+
+
 
 export default router;
