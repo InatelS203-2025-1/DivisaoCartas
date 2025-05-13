@@ -24,6 +24,8 @@ class UserController {
     }
   }
 
+
+  //Leticia
   async tradeCard(request: Request, response: Response): Promise<void> {
     const { user1Id, user2Id, card1Id, card2Id } = request.body;
 

@@ -30,6 +30,7 @@ export default class User {
     return { ...user, card: cards };
   }
 
+  //Leticia
   static updateUserCards(cardId: number, newUserId: string): void {
     db.run('UPDATE cards SET user_id = ? WHERE id = ?', [newUserId, cardId]);
   }

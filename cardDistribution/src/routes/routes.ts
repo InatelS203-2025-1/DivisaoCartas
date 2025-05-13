@@ -7,6 +7,8 @@ router.get('/', (req, res) => {
   res.status(200).send({ msg: 'ok' });
 })
 router.post('/users', UserController.createUser);
+
+//Leticia
 router.post('/users/trade', UserController.tradeCard);
 
 export default router;
