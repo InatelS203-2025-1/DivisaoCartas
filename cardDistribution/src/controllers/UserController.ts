@@ -23,6 +23,27 @@ class UserController {
       response.status(500).json({ message: 'Server error' });
     }
   }
+
+  //lilyan
+
+  async getUserCards(request: Request, response: Response): Promise<void> {
+  const userId = request.params.id;
+
+  try {
+    const cards = await User.getUserCards(userId);
+
+    if (!cards) {
+      response.status(404).json({ message: 'Usuário não encontrado ou sem cartas.' });
+      return;
+    }
+
+    response.status(200).json({ userId, cards });
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ message: 'Erro ao buscar cartas do usuário.' });
+  }
+}
+
 }
 
 export default new UserController();

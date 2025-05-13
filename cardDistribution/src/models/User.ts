@@ -20,4 +20,20 @@ export default class User {
   static findById(id: string): UserModel | undefined {
     return db.get<UserModel>('SELECT * FROM users WHERE id = ?', [id]);
   }
+
+  //lilyan
+
+  static getUserCards(userId: string): { id: number; name: string }[] {
+    const query = `
+      SELECT cards.id, pokemons.name
+      FROM cards
+      JOIN pokemons ON cards.id = pokemons.id
+      WHERE cards.user_id = ?
+    `;
+
+    // Asserção de tipo para garantir que os resultados sejam do tipo correto
+    const rows = db.all(query, [userId]) as { id: number; name: string }[];
+
+    return rows; // Retorna as linhas encontradas
+  }
 }
