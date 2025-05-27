@@ -1,24 +1,12 @@
-import express from "express";
-import dotenv from "dotenv";
-import router from "./routes/routes";
-import { db } from "./config/database";
+import setupDatabase from './config/database';
+import { app } from './server';
+import env from './env/index';
 
-dotenv.config();
+async function bootstrap() {
+  await setupDatabase();
+  app.listen(env.PORT, () => {
+    console.log(`Server running on http://localhost:${env.PORT}`);
+  });
+}
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(router);
-db.setup();
-
-app.get('/', (req, res) => {
-  res.send('API de distribuição de cartas está rodandoooooooooo!');
-});
-
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+bootstrap();

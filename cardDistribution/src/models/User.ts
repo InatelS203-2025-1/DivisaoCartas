@@ -1,48 +1,46 @@
-import { db } from '../config/database'
 import { UserModel } from '../interfaces/UserModel';
-import Card from './Card';
+import { knex as db } from '../config/knexfile';
 
 export default class User {
-  static createUser(user: UserModel) {
-    const query = 'INSERT INTO users (id, name) VALUES (?, ?)';
-    db.run(query, [user.id, user.name]);
+  static async createUser(user: UserModel): Promise<any> {
+    const felipe = await db('users').insert({ id: user.id, name: user.name }).returning('*');
+    console.log(felipe);
 
-    for (const card of user.card) {
-      db.run('INSERT INTO cards (id, user_id) VALUES (?, ?)', [card.id, user.id]);
-    }
+    const cards = await Promise.all(
+      user.card.map((card) => db('cards').insert({ id: card.id, user_id: user.id })),
+    );
+    console.log(cards);
+    return { felipe, cards };
   }
 
-  static findAll(): UserModel[] {
-    return db.all<UserModel>('SELECT * FROM users');
+  static async findAll(): Promise<UserModel[]> {
+    return db('users').select('*');
   }
 
-  static findById(id: string): UserModel | undefined {
-    return db.get<UserModel>('SELECT * FROM users WHERE id = ?', [id]);
+  static async findById(id: string): Promise<UserModel | undefined> {
+    const user = await db('users').where({ id }).first();
+    return user as UserModel | undefined;
   }
 
-  static getUserCards(userId: string): { id: number; name: string }[] {
-    const query = `
-    SELECT cards.id, cards.user_id, users.name
-    FROM cards
-    JOIN users ON cards.user_id = users.id
-    WHERE cards.user_id = ?;
-    `;
-
-    const rows = db.all(query, [userId]) as { id: number; name: string }[];
-
-    return rows;
+  static async getUserCards(userId: string): Promise<{ id: number; name: string }[]> {
+    const userCards = await db('cards').select('*');
+    // .join('users', 'cards.user_id', '=', 'users.id')
+    // .where('cards.user_id', userId)
+    // .select('cards.id', 'users.name');
+    console.log(userCards);
+    return userCards;
   }
-  
-  static getUserById(id: string): UserModel | undefined {
-    const user = this.findById(id);
+
+  static async getUserById(userId: string): Promise<UserModel | undefined> {
+    const user = await this.findById(userId);
     if (!user) return undefined;
+    // return user;
 
-    const cards = db.all<Card>('SELECT * FROM cards WHERE user_id = ?', [id]);
+    const cards = await db('cards').where({ user_id: userId });
     return { ...user, card: cards };
   }
 
-  static updateUserCards(cardId: number, newUserId: string): void {
-    db.run('UPDATE cards SET user_id = ? WHERE id = ?', [newUserId, cardId]);
-
+  static async updateUserCards(cardId: number, newUserId: string): Promise<void> {
+    await db('cards').where({ id: cardId }).update({ user_id: newUserId });
   }
 }

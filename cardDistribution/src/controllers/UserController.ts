@@ -1,23 +1,29 @@
-import { Request, Response } from "express";
-import User from "../models/User";
-import { v4 as uuidv4 } from 'uuid'
-import PokeApiService from '../services/pokeApi/pokeApi'
-import Card from "../models/Card";
-import { requestHelper } from "../utils/requestHelpers";
+import { Request, Response } from 'express';
+import { v4 as uuidv4 } from 'uuid';
+import z from 'zod';
+import User from '../models/User';
+import PokeApiService from '../services/pokeApi/pokeApi';
+import Card from '../models/Card';
+import { requestHelper } from '../utils/requestHelpers';
 
-class UserController {
-
-  async createUser(request: Request, response: Response): Promise<void> {
+export default class UserController {
+  static async createUser(request: Request, response: Response): Promise<void> {
+    const createUserBodySchema = z.object({
+      username: z.string(),
+    });
+    const { username } = createUserBodySchema.parse(request.body);
     const userId: string = uuidv4();
-    const { username }: { username: string } = request.body;
 
     try {
+      // await checkUsernameValidity(username);
       const userPokemons = await PokeApiService.sortUserPokemons();
-      const cards: Card[] = userPokemons.map(id => ({ id, user_id: userId }));
-      
+      const cards: Card[] = userPokemons.map((id) => ({ id, user_id: userId }));
+
       User.createUser({ id: userId, card: cards, name: username });
 
-      requestHelper(response, 201, { username, cards })
+      const returnCards = cards.map((card) => card.id);
+
+      requestHelper(response, 201, { username, cards: returnCards, userId });
     } catch (error) {
       console.error(error);
       response.status(500).json();
@@ -25,35 +31,33 @@ class UserController {
     }
   }
 
-
-
-
-  async getUserCards(request: Request, response: Response): Promise<void> {
-  const userId = request.params.id;
-
-  try {
-    const cards = await User.getUserCards(userId);
-
-    if (!cards) {
-      response.status(404).json({ message: 'Usuário não encontrado ou sem cartas.' });
-      return;
-    }
-
-    requestHelper(response, 200, { userId, cards });
-  } catch (error) {
-    console.error(error);
-    response.status(500).json({ message: 'Erro ao buscar cartas do usuário.' });
-  }
-}
-
-
-  //Leticia
-  async tradeCard(request: Request, response: Response): Promise<void> {
-    const { user1Id, user2Id, card1Id, card2Id } = request.body;
+  static async getUserCards(request: Request, response: Response): Promise<void> {
+    const userId = request.params.id;
 
     try {
-      const user1 = User.getUserById(user1Id);
-      const user2 = User.getUserById(user2Id);
+      // const user = await User.getUserById(userId);
+      // console.log(cards);
+
+      // if (!cards) {
+      //   response.status(404).json({ message: 'Usuário não encontrado ou sem cartas.' });
+      //   return;
+      // }
+
+      // requestHelper(response, 200, { userId, cards });
+    } catch (error) {
+      console.error(error);
+      response.status(500).json({ message: 'Erro ao buscar cartas do usuário.' });
+    }
+  }
+
+  static async tradeCard(request: Request, response: Response): Promise<void> {
+    const {
+      user1Id, user2Id, card1Id, card2Id,
+    } = request.body;
+
+    try {
+      const user1 = await User.getUserById(user1Id);
+      const user2 = await User.getUserById(user2Id);
 
       if (!user1 || !user2) {
         requestHelper(response, 404, { message: 'Usuário não encontrado' });
@@ -77,7 +81,7 @@ class UserController {
       requestHelper(response, 200, {
         message: 'Troca realizada com sucesso',
         user1: updatedUser1,
-        user2: updatedUser2
+        user2: updatedUser2,
       });
     } catch (error) {
       console.error(error);
@@ -85,5 +89,3 @@ class UserController {
     }
   }
 }
-
-export default new UserController();
