@@ -3,3 +3,4 @@
 cardDistribution/node_modules
 cardDistribution/dist
 cardDistribution/.env
+cardDistribution/cardsystem.db

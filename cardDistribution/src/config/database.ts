@@ -1,39 +1,21 @@
-import Database from 'better-sqlite3';
-export class SQLiteDatabase {
-  private db: InstanceType<typeof Database>;
+import { knex } from './knexfile';
 
-
-  constructor(filename: string) {
-    this.db = new Database(filename);
+export default async function setupDatabase(): Promise<void> {
+  console.log('setting database..');
+  const hasUsers = await knex.schema.hasTable('users');
+  if (!hasUsers) {
+    await knex.schema.createTable('users', (table) => {
+      table.text('id').primary().unique();
+      table.text('name').unique().notNullable();
+    });
   }
 
-  run(query: string, params?: any[]) {
-    return this.db.prepare(query).run(params);
-  }
-
-  get<T>(query: string, params?: any[]): T | undefined {
-    return this.db.prepare(query).get(params) as T;
-  }
-
-  all<T>(query: string, params?: any[]): T[] {
-    return this.db.prepare(query).all(params) as T[];
-  }
-  setup(): void {
-    this.db.prepare(`
-      CREATE TABLE IF NOT EXISTS users (
-        id TEXT PRIMARY KEY UNIQUE,
-        name TEXT NOT NULL
-      )
-    `).run();
-
-    this.db.prepare(`
-      CREATE TABLE IF NOT EXISTS cards (
-        id INTEGER PRIMARY KEY,
-        user_id TEXT NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-      )
-    `).run();
+  const hasCards = await knex.schema.hasTable('cards');
+  if (!hasCards) {
+    await knex.schema.createTable('cards', (table) => {
+      table.increments('id').primary();
+      table.text('user_id').notNullable();
+      table.foreign('user_id').references('users.id').onDelete('CASCADE');
+    });
   }
 }
-
-export const db = new SQLiteDatabase('cardsystem.db');

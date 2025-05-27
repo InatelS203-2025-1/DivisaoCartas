@@ -13,3 +13,5 @@ build/*
 # Ignorar arquivos temporários e de log
 *.log
 *.tmp
+
+cardsystem.db
