@@ -43,4 +43,15 @@ export default class User {
   static async updateUserCards(cardId: number, newUserId: string): Promise<void> {
     await db('cards').where({ id: cardId }).update({ user_id: newUserId });
   }
+
+  //lilyan
+
+  static async updateUserName(id: string, newName: string): Promise<void> {
+  await db('users').where({ id }).update({ name: newName });
+}
+
+static async deleteUserById(id: string): Promise<void> {
+  await db('users').where({ id }).delete();
+}
+
 }
