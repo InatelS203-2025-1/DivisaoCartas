@@ -72,11 +72,11 @@ export default class UserController {
         return;
       }
 
-      User.updateUserCards(card1Id, user2Id);
-      User.updateUserCards(card2Id, user1Id);
+      await User.updateUserCards(card1Id, user2Id);
+      await User.updateUserCards(card2Id, user1Id);
 
-      const updatedUser1 = User.getUserById(user1Id);
-      const updatedUser2 = User.getUserById(user2Id);
+      const updatedUser1 = await User.getUserById(user1Id);
+      const updatedUser2 = await User.getUserById(user2Id);
 
       requestHelper(response, 200, {
         message: 'Troca realizada com sucesso',
