@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import { v4 as uuidv4 } from 'uuid';
 import { knex } from '../config/knexfile';
 import { UserModel } from '../interfaces/UserModel';
@@ -12,7 +13,7 @@ class UserRepository {
     const users = await knex<UserFromDB>('users').select('*');
     return users.map((user: UserFromDB) => ({
       ...user,
-      card: []
+      card: [],
     }));
   }
 
@@ -22,7 +23,7 @@ class UserRepository {
 
     return {
       ...user,
-      card: []
+      card: [],
     };
   }
 
@@ -32,7 +33,7 @@ class UserRepository {
 
     return {
       ...user,
-      card: []
+      card: [],
     };
   }
 
@@ -44,12 +45,12 @@ class UserRepository {
     const user = {
       id: uuidv4(),
       name,
-      card: []
+      card: [],
     };
 
     await knex('users').insert({
       id: user.id,
-      name: user.name
+      name: user.name,
     });
 
     return user;

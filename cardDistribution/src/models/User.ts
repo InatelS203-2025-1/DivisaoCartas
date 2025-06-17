@@ -13,6 +13,10 @@ export default class User {
     return { felipe, cards };
   }
 
+  static async create(name: { name: string }) {
+    return 200;
+  }
+
   static async findAll(): Promise<UserModel[]> {
     return db('users').select('*');
   }

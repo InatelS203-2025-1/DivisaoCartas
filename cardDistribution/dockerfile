@@ -1,0 +1,20 @@
+# Usa a imagem oficial do Node.js 22 como base
+FROM node:22
+
+# Define o diretório de trabalho dentro do container
+WORKDIR /app
+
+# Copia apenas os arquivos necessários para instalar as dependências
+COPY package*.json ./
+
+# Instala as dependências do projeto
+RUN npm install
+
+# Copia o restante dos arquivos do projeto
+COPY . .
+
+# Expõe a porta que o app usa (altere se for diferente)
+EXPOSE 3000
+
+# Comando padrão para rodar o app (ajuste conforme seu script)
+CMD ["npm", "start"]
