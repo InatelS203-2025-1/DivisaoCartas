@@ -66,9 +66,11 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 #### **1. Criar um novo jogador**
 **`POST /users**
 **Request Body**
+```json
 {
   "nome": "João"
 }
+```
 **Resposta:**
 ```json
 {
