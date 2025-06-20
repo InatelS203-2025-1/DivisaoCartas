@@ -105,7 +105,7 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 ```json
 {
   "id": 1,
-  "nome": "Ash Ketchum",
+  "nome": "João",
   "pokemons": [
     {
       "id": 25,
@@ -120,7 +120,7 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 ```
 #### **4. Registrar uma troca de cartas entre jogadores**
 **`PUT /users/trade`**
-**Request Body (Exemplo):**
+**Request Body:**
 ```json
 {
   "idJogador1": 1,
