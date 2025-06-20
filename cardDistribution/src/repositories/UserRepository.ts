@@ -1,7 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { v4 as uuidv4 } from 'uuid';
 import { knex } from '../config/knexfile';
-import { UserModel } from '../interfaces/UserModel';
 
 interface UserFromDB {
   id: string;
@@ -9,7 +8,7 @@ interface UserFromDB {
 }
 
 class UserRepository {
-  async findAll(): Promise<UserModel[]> {
+  async findAll() {
     const users = await knex<UserFromDB>('users').select('*');
     return users.map((user: UserFromDB) => ({
       ...user,
@@ -17,7 +16,7 @@ class UserRepository {
     }));
   }
 
-  async findById(id: string): Promise<UserModel | undefined> {
+  async findById(id: string) {
     const user = await knex<UserFromDB>('users').where({ id }).first();
     if (!user) return undefined;
 
@@ -27,7 +26,12 @@ class UserRepository {
     };
   }
 
-  async findByName(name: string): Promise<UserModel | undefined> {
+  async findCardsById(userId: string) {
+    const cards = await knex('cards').select('*').where('user_id', userId);
+    return cards;
+  }
+
+  async findByName(name: string) {
     const user = await knex<UserFromDB>('users').where({ name }).first();
     if (!user) return undefined;
 
@@ -41,11 +45,11 @@ class UserRepository {
     await knex('users').where({ id }).delete();
   }
 
-  async create({ name }: Omit<UserModel, 'id' | 'card'>): Promise<UserModel> {
+  async create({ name, card }: { name: string, card: number[] }) {
     const user = {
       id: uuidv4(),
       name,
-      card: [],
+      card,
     };
 
     await knex('users').insert({
@@ -53,14 +57,21 @@ class UserRepository {
       name: user.name,
     });
 
-    return user;
+    const cardRows = card.map((cardNumber) => ({
+      user_id: user.id,
+      id: cardNumber,
+    }));
+    if (cardRows.length > 0) {
+      await knex('cards').insert(cardRows);
+    }
+
+    return { user: user.id, cardRows };
   }
 
-  async update(id: string, data: Partial<Omit<UserModel, 'id' | 'card'>>): Promise<UserModel | undefined> {
-    await knex('users')
-      .where({ id })
-      .update(data);
-
+  async update(id: string, cardId: number, oldCardId: number) {
+    await knex('cards')
+      .where('user_id', id).where('id', oldCardId)
+      .update({ user_id: id, id: cardId });
     const updatedUser = await this.findById(id);
     return updatedUser;
   }
