@@ -63,9 +63,40 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 
 ### **Endpoints**
 
+#### **1. Criar um novo jogador**
+**`POST /users**
+**Request Body**
+{
+  "nome": "João"
+}
+**Resposta:**
+```json
+{
+  "id": 1,
+  "nome": "João"
+}
+```
 
-#### **1. Consulta de Pokémons de um jogador**
-**`GET /users/{id}/pokemons`**
+#### **2. Listar todos os jogadores**
+**`GET /users**
+
+**Resposta:**
+```json
+[
+  {
+    "id": 1,
+    "nome": "joão"
+  },
+  {
+    "id": 2,
+    "nome": "Maria"
+  }
+]
+
+```
+
+#### **3. Consulta de Pokémons de um jogador**
+**`GET /users/{id}/card`**
 
 
 **Resposta:**
@@ -85,41 +116,24 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
   ]
 }
 ```
-#### **2. Distribuição de cartas para um jogador**
-**`PUT /jogadores/{id}/pokemons`**
-
-**Resposta:**
+#### **4. Registrar uma troca de cartas entre jogadores**
+**`PUT /users/trade`**
+**Request Body (Exemplo):**
 ```json
 {
-  "id": 1,
-  "nome": "Ash Ketchum",
-  "pokemons": [
-    {
-      "id": 25,
-      "nome": "Pikachu"
-    },
-    {
-      "id": 6,
-      "nome": "Charizard"
-    },
-    {
-      "id": 150,
-      "nome": "Mewtwo"
-    },
-    {
-      "id": 131,
-      "nome": "Lapras"
-    },
-    {
-      "id": 94,
-      "nome": "Gengar"
-    }
-  ]
+  "idJogador1": 1,
+  "idJogador2": 2,
+  "idCartaJogador1": 25,
+  "idCartaJogador2": 7
 }
-
+```
+**Resposta (Sucesso):**
+```json
+{
+  "mensagem": "Troca realizada com sucesso!"
+}
 ```
 ---
-
 ## Regras de Negócio
 - Um jogador recebe cinco Pokémons aleatórios no momento do cadastro.
 - Um jogador não pode ter Pokémons repetidos.
