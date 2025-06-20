@@ -64,7 +64,7 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 ### **Endpoints**
 
 #### **1. Criar um novo jogador**
-**`POST /users**
+**`POST /users`**
 **Request Body**
 ```json
 {
@@ -80,7 +80,7 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 ```
 
 #### **2. Listar todos os jogadores**
-**`GET /users**
+**`GET /users`**
 
 **Resposta:**
 ```json
