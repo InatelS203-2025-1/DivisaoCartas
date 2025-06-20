@@ -38,7 +38,12 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
     O projeto também usa comunicação assíncrona para distribuir cartas a novos jogadores, toda vez que um novo jogador é registrado no broker do RabbitMQ, o sistema reage distribuindo as cartas ao jogador e salvando no banco de dados.
 
 ---
+## Design Patterns
+- **Observer** Aplicado na comunicação assíncrona com o RabbitMQ, permitindo que, sempre que um novo jogador é cadastrado, uma mensagem seja automaticamente enviada para outros serviços interessados. Esse padrão garante o desacoplamento entre quem emite o evento (cadastro) e quem consome (serviços que recebem as mensagens).
+- **Singleton** Empregado nos repositories e controllers para garantir que exista apenas uma única instância desses objetos durante toda a execução da aplicação. Isso otimiza o uso de recursos, além de garantir um ponto de acesso global e consistente para essas classes.
+- **Repository** Responsável por abstrair a comunicação com o banco de dados, isolando a lógica de acesso aos dados da lógica de negócios. Esse padrão facilita a manutenção, testes e possíveis trocas de tecnologias de persistência no futuro.
 
+---
 ## Fluxo de Funcionamento
    
 1. **Seleção de Pokémons**
