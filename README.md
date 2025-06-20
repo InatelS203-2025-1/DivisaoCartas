@@ -98,7 +98,7 @@ A aplicação também disponibiliza uma interface para consulta dessas informaç
 ```
 
 #### **3. Consulta de Pokémons de um jogador**
-**`GET /users/{id}/card`**
+**`GET /users/{id}/cards`**
 
 
 **Resposta:**
